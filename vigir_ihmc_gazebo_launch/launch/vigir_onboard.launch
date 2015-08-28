@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+
+<launch>
+
+  <include file="$(find vigir_onboard)/launch/motion.launch" />
+
+  <include file="$(find vigir_ihmc_gazebo_launch)/launch/onboard_perception_ihmc_simulator.launch" />-
+
+  <include file="$(find vigir_ihmc_footstep_integration)/launch/ihmc_footstep_server.launch" />
+  <include file="$(find vigir_ihmc_control_integration)/launch/ihmc_arm_control_action_servers.launch" />  
+  
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" >
+    <remap from="joint_states" to="/atlas/joint_states" />
+  </node>
+  
+</launch>
+

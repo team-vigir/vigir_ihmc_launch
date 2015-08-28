@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<!--
+This is a modified version of the original ihmc_atlas_gazebo_controller.launch
+file from ihmc_gazebo. It has been modified to not re-upload the robot_description.
+-->
+
+<launch>
+  <param name="use_sim_time" value="true"/>
+  <arg name="ihmc_network_file" default="$(find ihmc_atlas)/configurations/IHMCNetworkParametersSim.ini" />
+  
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" >
+    <remap from="joint_states" to="/ihmc_ros/atlas/output/joint_states" />
+    <remap from="robot_description" to="/atlas/robot_description" />
+  </node>
+  <node name="IHMCAtlasGazeboController" pkg="ihmc_atlas" type="IHMCAtlasGazeboController" required="true" output="screen" cwd="node">
+	<env name="IHMC_ATLAS_API_OPTS" value="-DnetworkParameterFile=$(arg ihmc_network_file)" />
+  </node>
+</launch>

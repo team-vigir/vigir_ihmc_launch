@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<launch>
+  <arg name="gzname" default="gazebo"/>
+  <arg name="gzworld" default="atlas.world"/>
+  <arg name="extra_gazebo_args" default="" />
+
+  <param name="/use_sim_time" type="bool" value="true"/>
+
+  <!-- start gazebo with the some extra plugins and options -->
+<!--  <node name="gazebo" pkg="drcsim_gazebo" type="run_$(arg gzname)" args="$(arg gzworld) $(arg extra_gazebo_args)" output="screen">
+    <remap from="/clock" to="clock_gazebo" />
+  </node>-->
+  
+    <!-- start gazebo with the Atlas and record the gazebo log -->
+  <node name="gazebo" pkg="drcsim_gazebo" type="run_$(arg gzname)" args="$(arg gzworld) $(arg extra_gazebo_args)" output="screen">
+    <remap from="robot_description" to="/atlas/robot_description" />
+    <remap from="/atlas/joint_states" to="/atlas/joint_states_gazebo" />
+    <remap from="/multisense/lidar_scan" to="/multisense/lidar_scan_no_intensities_from_gazebo"/>
+    <remap from="/multisense/camera/left/image_raw" to="/multisense/left/image_rect_color"/>
+    <remap from="/multisense/camera/left/camera_info" to="/multisense/left/camera_info"/>
+    <remap from="/clock" to="clock_gazebo" />
+  </node>
+  
+  <node name="gazebo_laser_intensity_modifier_node" pkg="vigir_lidar_intensity_modifier" type="laser_intensity_modifier_node" output="screen">
+    <remap from="scan" to="/multisense/lidar_scan_no_intensities_from_gazebo"/>
+    <remap from="scan_out" to="/multisense/lidar_scan"/>
+  </node>
+</launch>
+  
